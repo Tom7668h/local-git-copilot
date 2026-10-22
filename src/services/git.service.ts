@@ -177,13 +177,19 @@ export class GitService {
 # local-git-copilot automated pre-commit DevSecOps hook
 # Checks for hardcoded secrets before allowing commit
 
+ROOT="$(git rev-parse --show-toplevel)"
 echo "🛡️  Running local-git-copilot pre-commit secret audit..."
-npx local-copilot scan --staged
+
+if [ -f "$ROOT/dist/cli.js" ]; then
+  node "$ROOT/dist/cli.js" scan --staged
+else
+  npx --no-install tsx "$ROOT/src/cli.ts" scan --staged
+fi
 
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]; then
   echo "❌ Commit rejected! Secret scanner detected sensitive data in staged changes."
-  echo "👉 Run 'npx local-copilot scan' to inspect violations and remediation tips."
+  echo "👉 Run 'npm run scan' to inspect violations and remediation tips."
   exit 1
 fi
 

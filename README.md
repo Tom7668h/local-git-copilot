@@ -21,11 +21,11 @@ Ein datenschutzorientierter, lokaler **Git DevSecOps Copilot & Pre-Commit Secret
 
 In modernen Entwicklungsumgebungen führen Zeitdruck und unachtsame Commits regelmäßig zu gravierenden Sicherheitsvorfällen: Hardcodierte AWS-Keys, API-Tokens, Passwörter oder private Schlüssel geraten versehentlich in öffentliche Repositories. Gleichzeitig verlangsamen inkonsistente Commit-Nachrichten und fehlende Code-Reviews die Zusammenarbeit in Entwicklerteams.
 
-**`local-git-copilot`** löst dies direkt auf dem Rechner der Entwickler:
+**`local-git-copilot`** bettet automatisierte Sicherheitsprüfungen und KI-Unterstützung direkt in den lokalen Git-Workflow ein:
 1. **Automatischer Pre-Commit Secret Scan:** Prüft staged Diffs in Echtzeit auf AWS-Schlüssel, JWT-Tokens, private Keys und Passwörter anhand regulärer Ausdrücke und Shannon-Entropie $H(X) = -\sum p(x) \log_2 p(x)$. Gefährliche Commits werden sofort blockiert.
 2. **Conventional Commit Generierung:** Formuliert präzise Conventional Commits (`feat(auth): ...`, `fix(db): ...`) über das lokale Ollama LLM (`llama3`, `qwen2.5-coder`, `deepseek`) oder einen deterministischen Heuristik-Fallback.
 3. **Lokales KI-Code-Review:** Analysiert Risiko, listet geänderte Module auf, erkennt Anti-Patterns und stellt eine automatisierte DevSecOps-Checkliste bereit.
-4. **1-Klick Pre-Commit Hook:** Installiert sich direkt in `.git/hooks/pre-commit` und schützt das Repository dauerhaft.
+4. **1-Klick Pre-Commit Hook:** Installiert sich direkt in `.git/hooks/pre-commit` und schützt das Repository dauerhaft vor versehentlichen Leaks.
 
 ---
 
@@ -62,12 +62,12 @@ In modernen Entwicklungsumgebungen führen Zeitdruck und unachtsame Commits rege
 
 ---
 
-### 🚀 Schnellstart
+### 🚀 Schnellstart & Installation
 
 #### Voraussetzungen
 - Node.js 20+ (LTS)
-- Git
-- *(Optional)* [Ollama](https://ollama.com/) lokal installiert
+- Git 2.30+
+- *(Optional)* [Ollama](https://ollama.com/) lokal installiert (`llama3`, `qwen2.5-coder` etc.)
 
 #### Installation & Build
 ```powershell
@@ -117,6 +117,9 @@ npm test
 
 ---
 
+### 📄 Lizenz
+MIT-Lizenz. Erstellt von [Tom7668h](https://github.com/Tom7668h).
+
 <br><br>
 
 ---
@@ -133,41 +136,87 @@ Developer pressure and human error frequently lead to leaked secrets: hardcoded 
 
 **`local-git-copilot`** embeds automated security and intelligence directly into the local Git workflow:
 1. **Pre-Commit Secret Auditing:** Analyzes staged diffs for AWS keys, JWTs, private keys, and high-entropy passwords using Shannon entropy formula $H(X) = -\sum p(x) \log_2 p(x)$. Commits containing secrets are immediately rejected.
-2. **Conventional Commit Synthesis:** Formulates structured Conventional Commits (`feat(...)`, `fix(...)`, etc.) using your local Ollama LLM (`llama3`, `qwen2.5-coder`, `deepseek`) or deterministic heuristics.
+2. **Conventional Commit Synthesis:** Formulates structured Conventional Commits (`feat(auth): ...`, `fix(db): ...`) using your local Ollama LLM (`llama3`, `qwen2.5-coder`, `deepseek`) or deterministic heuristics.
 3. **Automated AI Code Review:** Evaluates code risk, identifies potential anti-patterns, checks test coverage, and renders an interactive DevSecOps audit checklist.
 4. **Zero-Configuration Pre-Commit Hook:** Easily registers into `.git/hooks/pre-commit` to prevent secret leaks across entire teams.
 
 ---
 
-### ✨ Key Features
+### 🏗️ Architecture & Workflow
 
-- **🔒 100% Offline & Sovereign:** Operates completely inside the local machine. Zero external API calls, zero source code telemetry.
-- **⚡ Dual-Engine Operation:**
-  - **Local LLM Mode:** Connects to Ollama on `http://localhost:11434` (supporting `llama3`, `qwen2.5-coder`, `deepseek-r1`, `tinyllama`).
-  - **Offline Heuristic Mode:** High-precision deterministic parser that infers conventional types (`feat`, `fix`, `test`, `docs`, `ci`, `build`) directly from diff semantics if Ollama is not installed.
-- **🔍 Deep Secret Auditing:** Detects AWS Keys (`SEC-001`/`SEC-002`), Private Keys (`SEC-003`), JWTs (`SEC-004`), Generic API Keys (`SEC-005`), and High-Entropy Passwords (`SEC-006`).
-- **📋 Automated AI Code Reviewer:** Assesses risk level (`LOW`, `MEDIUM`, `HIGH`) and validates code changes against a security checklist.
+```
+       [ Developer: Staged Changes (git add) ]
+                          │
+                          ▼
+         ┌─────────────────────────────────┐
+         │ DevSecOps Secret Scanner        │
+         │  • Regex Pattern Detection      │
+         │  • Shannon Entropy Analysis     │
+         └────────┬───────────────┬────────┘
+                  │ Violations?   │ Clean
+                  ▼               ▼
+         [ 🚨 Commit Abort ] ┌─────────────────────────────────┐
+                             │ Dual-Intelligence Engine        │
+                             │  • Local Ollama LLM             │
+                             │  • Deterministic Heuristic      │
+                             │    Fallback Engine              │
+                             └────────────────┬────────────────┘
+                                              │
+                                              ▼
+                             ┌─────────────────────────────────┐
+                             │ Interactive Terminal Menu       │
+                             │  • Conventional Commit Options  │
+                             │  • AI Code Review & Checklist   │
+                             └────────────────┬────────────────┘
+                                              │ User Confirmed
+                                              ▼
+                                     [ git commit -m ]
+```
 
 ---
 
-### 🚀 Quickstart
+### 🚀 Quickstart & Installation
 
+#### Prerequisites
+- Node.js 20+ (LTS)
+- Git 2.30+
+- *(Optional)* [Ollama](https://ollama.com/) installed locally (`llama3`, `qwen2.5-coder`, etc.)
+
+#### Installation & Build
 ```bash
 git clone https://github.com/Tom7668h/local-git-copilot.git
 cd local-git-copilot
 npm install
 npm run build
-
-# Check status
-npm run dev -- status
-
-# Run automated commit
-npm run dev -- commit
 ```
 
 ---
 
-### 🧪 Automated Tests
+### 💻 CLI Commands
+
+```bash
+# 1. Check status (Ollama connection, Git branch, staged files)
+npm run dev -- status
+
+# 2. Interactive commit with secret audit & AI conventional commit suggestions
+npm run dev -- commit
+# Or stage all changes and commit in one go:
+npm run dev -- commit -a
+
+# 3. Run secret scan manually (for CI/CD or standalone execution)
+npm run scan
+npm run dev -- scan --staged
+
+# 4. Perform local AI code review on staged changes
+npm run review
+
+# 5. Register Git pre-commit hook
+npm run dev -- hook install
+```
+
+---
+
+### 🧪 Tests
 ```bash
 npm test
 ```
@@ -182,4 +231,4 @@ npm test
 ---
 
 ### 📄 License
-MIT © Tom7668h
+MIT License. Created by [Tom7668h](https://github.com/Tom7668h).
